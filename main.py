@@ -1,11 +1,16 @@
 import os
 import telebot
+from dotenv import load_dotenv
 from telebot import types
 from telebot.types import InputMediaPhoto
 
+load_dotenv()
 
-bot = telebot.TeleBot('8155015220:AAF7bzeWOs2oKGheq3Eg7iBrvfY8MZSyKeI')
+api = os.getenv("API_KEY")
 
+bot = telebot.TeleBot(api)
+
+print("Bot started")
 user_states = {}
 
 about_us_info = """
@@ -45,7 +50,7 @@ MENU_MAPPING = {
 def main_menu():
     markup = types.ReplyKeyboardMarkup(resize_keyboard=True)
     btn_about_us = types.KeyboardButton("Biz Xaqimizda")
-    btn_contacts= types.KeyboardButton("Kantaktlar")
+    btn_contacts = types.KeyboardButton("Kantaktlar")
     btn_catalogs = types.KeyboardButton("Katalog")
     markup.add(btn_about_us, btn_contacts, btn_catalogs)
 
@@ -67,6 +72,8 @@ def catalog_menu():
 
 @bot.message_handler(commands=['start'])
 def start(message):
+    print(f"Current user: {message.chat.first_name}")
+
     user_states[message.chat.id] = "main_menu"
     bot.send_message(
         message.chat.id,
