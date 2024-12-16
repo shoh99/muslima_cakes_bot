@@ -1,5 +1,8 @@
 import os
+import flask
 import telebot
+import threading
+
 from dotenv import load_dotenv
 from telebot import types
 from telebot.types import InputMediaPhoto
@@ -46,6 +49,10 @@ MENU_MAPPING = {
     "Kantaktlar":"contacts",
     "Katalog":"catalogs",
 }
+
+# flask server
+app = flask.Flask(__name__)
+
 
 def main_menu():
     markup = types.ReplyKeyboardMarkup(resize_keyboard=True)
@@ -147,5 +154,17 @@ def send_photos_in_batches(chat_id, photos):
         bot.send_media_group(chat_id, photos[i:i + BATCH_SIZE])
 
 
+@app.route("/")
+def home():
+    return "Muslima Cake bot is running"
 
-bot.infinity_polling()
+
+#start the bot
+def start_bot():
+    bot.infinity_polling()
+
+if __name__ == "__main__":
+    bot_thread = threading.Thread(target=start_bot)
+    bot_thread.start()
+
+    app.run(host="0.0.0.0", port=8080)
