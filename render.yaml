@@ -1,0 +1,6 @@
+services:
+  - name: mulima-cakes-bot
+    type: worker  # Set to worker for background tasks
+    env: python
+    buildCommand: "pip install -r requirements.txt"
+    startCommand: "python main.py"
